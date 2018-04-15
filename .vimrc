@@ -8,6 +8,7 @@ set noswapfile
 call plug#begin('~/.vim/plugged')
 "Vim Addons
 Plug  'https://github.com/dracula/vim'
+Plug  'https://github.com/terryma/vim-smooth-scroll'
 Plug  'https://github.com/jiangmiao/auto-pairs'
 "Powershell
 Plug 'https://github.com/PProvost/vim-ps1'
