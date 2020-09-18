@@ -1,89 +1,74 @@
-let g:loaded_matchit = 1
-""Region Plugins
-call plug#begin('~/.local/share/nvim/plugged')
-"Color
- Plug 'morhetz/gruvbox'
-
-"Default Setup
- Plug 'tpope/vim-sensible'
-
-"Auto Complete
- Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins'}
-
-"Linting
- Plug 'w0rp/ale'
-
-"Github
- Plug 'tpope/vim-fugitive'
-
-"Fuzzy Finder
- Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-
-"Language Highlighting
- Plug 'sheerun/vim-polyglot'
-
-"New Motions
- Plug 'tpope/vim-surround'
- Plug 'tpope/vim-repeat'
- Plug 'tpope/vim-commentary'
- Plug 'justinmk/vim-sneak'
- Plug 'terryma/vim-multiple-cursors'
-
-"Testing
- Plug 'janko-m/vim-test'
-
- "Highlighting
- Plug 'andymass/vim-matchup'
-
- "Autoformater
- Plug 'ambv/black'
- Plug 'prettier/vim-prettier'
-
-call plug#end()
-"EndRegion
-
+source  ~/.config/nvim/plugins.vimrc
+source  ~/.config/nvim/key_bindings.vimrc
+source  ~/.config/nvim/functions.vimrc
 "Region Set
 set number
-set background=dark
-colorscheme gruvbox
-"EndRegion
+set hidden
+set signcolumn=auto:2
+set updatetime=300
+set colorcolumn=80
+"Color
+colorscheme palenight
+set termguicolors
 
-"Region KeyBindings
-"Set Leader
-let mapleader = " "
-
-"Disabled Keys
-nnoremap Q <Nop>
-
-"Split Navagationa
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-H> <C-W><C-H>
-
-"Test
+set cursorline
+"Menu
+set wildoptions+=pum
+"Search
+set ignorecase
+set incsearch 
+set smartcase
+set hlsearch
+set nobackup
+set nowritebackup
+syntax on 
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+""
+""Highlights"
+highlight LineNr term=bold cterm=NONE ctermfg=white ctermbg=NONE gui=NONE guifg=white guibg=NONE
+highlight CursorLineNr term=bold ctermfg=11 gui=bold guifg=Yellow
+"" EndRegion
+"" Ale
+hi CocUnderline gui=undercurl term=underline
+hi CocErrorHighlight ctermfg=red  guifg=#c4384b gui=underline term=underline
+hi CocWarningHighlight ctermfg=yellow guifg=#c4ab39 gui=underline term=underline
+"" EndRegion
+"" Test
+let test#java#runner = 'gradletest'
+let test#strategy = "neovim"
+let g:test#preserve_screen = 1
+if has('nvim')
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  tnoremap <Esc> <C-\><C-n>
+endif
+""EndRegion
+""NeoFormat
+"LightLine
+let g:lightline = {
+      \ 'colorscheme': 'palenight',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch','filename', 'readonly','coc_error', 'coc_warning' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#error',
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
+""EndRegion
+"Region ClostTages
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.js,*.tsx'
+"Region ClostTages
+"Region COC
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
+endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+au TermOpen * setlocal listchars= nonumber norelativenumber
+au TermOpen * startinsert
+au BufEnter,BufWinEnter,WinEnter term://* startinsert
+au BufLeave term://* stopinsert
 "
-nmap <silent> tn :TestNearest<CR> " t Ctrl+n
-nmap <silent> tf :TestFile<CR>    " t Ctrl+f
-nmap <silent> ts :TestSuite<CR>   " t Ctrl+s
-nmap <silent> tl :TestLast<CR>    " t Ctrl+l
-nmap <silent> tv :TestVisit<CR>   " t Ctrl+g
 
-"Auto Complete
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-"EndRegion
-
-"Region GruvBox Settings
-
-"EndRegion
-
-"Region Ale
-let g:ale_sign_error = 'E'
-let g:ale_sign_warning = 'W'
-"Python
-
-"EndRegion
-
-"Region Deoplete
-let g:deoplete#enable_at_startup = 1
-"EndRegion
